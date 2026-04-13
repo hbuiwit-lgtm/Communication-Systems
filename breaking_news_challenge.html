@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Breaking News Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .poster {
+    width: 850px;
+    background: #f5f0e8;
+    position: relative;
+    overflow: hidden;
+    border: 6px solid #0a0a0a;
+  }
+
+  /* Newsprint texture lines */
+  .poster::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 22px,
+      rgba(0,0,0,0.03) 22px,
+      rgba(0,0,0,0.03) 23px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .header {
+    background: #0a0a0a;
+    padding: 1.5rem 2.5rem 1.2rem;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 4px solid #c8382a;
+  }
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .paper-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    color: #f5f0e8;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .paper-sub {
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .header-right {
+    text-align: right;
+    color: #555;
+    font-size: 11px;
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+  }
+
+  .header-right strong {
+    color: #c8382a;
+    font-size: 13px;
+    display: block;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .ticker-bar {
+    background: #c8382a;
+    padding: 0.4rem 2.5rem;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+  }
+
+  .content {
+    padding: 2rem 2.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 58px;
+    color: #0a0a0a;
+    line-height: 0.95;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+  }
+
+  .headline span {
+    color: #c8382a;
+  }
+
+  .deck {
+    font-size: 15px;
+    color: #333;
+    border-top: 2px solid #0a0a0a;
+    border-bottom: 1px solid #ccc;
+    padding: 0.6rem 0;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  .scenario-box {
+    background: #0a0a0a;
+    color: #f5f0e8;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-left: 5px solid #c8382a;
+  }
+
+  .scenario-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #c8382a;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+
+  .scenario-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    line-height: 1.1;
+    letter-spacing: 1px;
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .col-divider {
+    display: grid;
+    grid-template-columns: 1fr 4px 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .divider-line {
+    background: #0a0a0a;
+    width: 1px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #c8382a;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid #0a0a0a;
+  }
+
+  .groups-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .group-card {
+    border: 2px solid #0a0a0a;
+    padding: 0.9rem 1rem;
+    position: relative;
+  }
+
+  .group-card::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -1px;
+    right: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: rgba(0,0,0,0.06);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .group-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: #0a0a0a;
+    margin-bottom: 0.2rem;
+  }
+
+  .group-rule {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  .group-rule strong {
+    color: #c8382a;
+    font-weight: 600;
+  }
+
+  .steps-col { }
+
+  .step {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 0.9rem;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: #c8382a;
+    line-height: 1;
+    min-width: 24px;
+  }
+
+  .step-text {
+    font-size: 13px;
+    color: #222;
+    line-height: 1.5;
+    padding-top: 3px;
+  }
+
+  .step-text strong {
+    display: block;
+    font-weight: 600;
+    color: #0a0a0a;
+    font-size: 13px;
+  }
+
+  .think-box {
+    background: #fff;
+    border: 2px solid #0a0a0a;
+    padding: 1rem 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  .think-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+
+  .think-qs {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.6rem;
+  }
+
+  .think-q {
+    font-size: 12px;
+    color: #333;
+    padding-left: 0.8rem;
+    border-left: 2px solid #c8382a;
+    line-height: 1.4;
+  }
+
+  .footer {
+    background: #0a0a0a;
+    padding: 0.7rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+
+  .standard-tag {
+    font-size: 10px;
+    color: #666;
+    letter-spacing: 1px;
+  }
+
+  .time-badge {
+    background: #c8382a;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0.3rem 0.9rem;
+  }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <div class="header">
+    <div class="masthead">
+      <div class="paper-name">The Daily Brief</div>
+      <div class="paper-sub">7th Grade Communications — Classroom Edition</div>
+    </div>
+    <div class="header-right">
+      <strong>Class Activity</strong>
+      Group sizes: 4–5 students<br>
+      All materials provided<br>
+      No devices required
+    </div>
+  </div>
+
+  <div class="ticker-bar">⚡ Breaking News Challenge — Group Activity</div>
+
+  <div class="content">
+
+    <div class="headline">Report It<br>Your <span>Way.</span></div>
+    <div class="deck">A role-play activity exploring how different communication systems share the same story — and why it matters.</div>
+
+    <div class="scenario-box">
+      <div class="scenario-label">📡 Today's Breaking Story</div>
+      <div class="scenario-text">"A Meteor Just Landed in<br>the School Parking Lot!"</div>
+    </div>
+
+    <div class="col-divider">
+      <div>
+        <div class="section-label">Your Groups</div>
+        <div class="groups-grid">
+          <div class="group-card" data-num="1">
+            <div class="group-name">📻 Radio</div>
+            <div class="group-rule">Write an <strong>audio-only script</strong>. No visuals, no images — only words people can hear. Keep it under 60 seconds.</div>
+          </div>
+          <div class="group-card" data-num="2">
+            <div class="group-name">📺 Television</div>
+            <div class="group-rule">Write a <strong>TV news script</strong> that describes both what you say AND what viewers will see on screen.</div>
+          </div>
+          <div class="group-card" data-num="3">
+            <div class="group-name">📰 Print</div>
+            <div class="group-rule">Write a short <strong>newspaper article</strong> with a headline, who/what/where/when/why, and as much detail as possible.</div>
+          </div>
+          <div class="group-card" data-num="4">
+            <div class="group-name">🌐 Internet</div>
+            <div class="group-rule">Write a <strong>social media post</strong>. Include a caption, hashtags, and 3 "replies" from the public.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider-line"></div>
+
+      <div class="steps-col">
+        <div class="section-label">How It Works</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Get into your group</strong>Your teacher will assign each group one communication system.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Report the story</strong>Use ONLY the rules for your system. Radio can't show pictures. Print can't be instant. Stick to it!</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>Present to the class</strong>Each group shares their report. Act it out if you can!</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text"><strong>Discuss together</strong>What was easy? What was frustrating? What couldn't you do?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="think-box">
+      <div class="think-label">💬 Discussion Questions — Be Ready to Answer These</div>
+      <div class="think-qs">
+        <div class="think-q">Which system reached the most people the fastest?</div>
+        <div class="think-q">Which system gave the most detail? Why does that matter?</div>
+        <div class="think-q">Which was the only system where the audience could respond?</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="standard-tag" style="color:#666">Standard: 7.MS-ETS3-2(MA) — Compare benefits and drawbacks of communication systems</div>
+    <div class="time-badge">⏱ ~30 Minutes</div>
+  </div>
+
+</div>
+</body>
+</html>
